@@ -2,8 +2,10 @@ from flask import Flask
 import config
 
 app = Flask(__name__)
-fromt app import views
+from views import *
+app.register_blueprint(front_ends)
 
+# from apis import posts
 
 # @app.route('/')
 # @app.route('/index')
