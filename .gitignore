@@ -1,6 +1,11 @@
 medhub/
+<<<<<<< HEAD
 app/__init__.pyc
 app/views.pyc
 *.pyc
 .vscode/settings.json
 .vscode/tags
+=======
+medhubFlask/
+*.pyc
+>>>>>>> 29dc4c9c61c4c66d5a8af33c0c3b214cb937a39c
