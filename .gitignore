@@ -1,1 +1,4 @@
 medhub/
+app/__init__.pyc
+app/views.pyc
+*.pyc
