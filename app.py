@@ -5,7 +5,7 @@ import views
 
 app = Flask(__name__)
 
-app.register_blueprint(views.main)
+app.register_blueprint(views.front_ends)
 
 # from apis import posts
 
