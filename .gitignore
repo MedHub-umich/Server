@@ -2,3 +2,5 @@ medhub/
 app/__init__.pyc
 app/views.pyc
 *.pyc
+.vscode/settings.json
+.vscode/tags
