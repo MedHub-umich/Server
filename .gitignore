@@ -1,1 +1,3 @@
 medhub/
+medhubFlask/
+*.pyc
