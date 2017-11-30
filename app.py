@@ -1,9 +1,11 @@
 from flask import Flask
 import config
+import views
+
 
 app = Flask(__name__)
-from views import *
-app.register_blueprint(front_ends)
+
+app.register_blueprint(views.main)
 
 # from apis import posts
 
