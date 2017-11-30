@@ -1,11 +1,13 @@
 from flask import Flask
 import config
 import views
+import api
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 app.config.from_object(config.Config)
 app.register_blueprint(views.front_ends)
+app.register_blueprint(api.posts, url_prefix="/api")
 
 # from apis import posts
 
