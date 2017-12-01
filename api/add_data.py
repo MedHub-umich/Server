@@ -15,11 +15,11 @@ class PacketTypes:
 # TODO: Make real periods
 # TODO: Figure out how to modify time
 class PacketPeriods:
-    ECG = 2lk;
-    HEART_RATE = 3
-    BREATHING_RATE = 4
-    TEMPERATURE = 5
-    BLOOD_PRESSURE = 1
+    ECG = 4000
+    HEART_RATE = 10000000
+    BREATHING_RATE = 60000000
+    TEMPERATURE = 60000000
+    BLOOD_PRESSURE = -1
 
 add_data = Blueprint('add_data', __name__)
 
