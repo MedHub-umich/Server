@@ -1,6 +1,6 @@
 from flask import *
 import settings
-from helpers import *
+# from helpers import *
 
 db = settings.db
 
@@ -93,6 +93,12 @@ def parse_data(raw_data, period, starting_time):
     data.reverse()
     return data
 
+def respond_success():
+    return jsonify(), 200
+
+def respond_failure(message):
+    message = {"message": message}
+    return message, 500
 
 
 
