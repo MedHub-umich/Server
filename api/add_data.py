@@ -11,7 +11,11 @@ class PacketTypes:
     BLOOD_PRESSURE = 1
 
 class PacketPeriods:
-    ECG = 1
+    ECG = 2
+    HEART_RATE = 3
+    BREATHING_RATE = 4
+    TEMPERATURE = 5
+    BLOOD_PRESSURE = 1
 
 add_data = Blueprint('add_data', __name__)
 
@@ -33,31 +37,54 @@ add_data = Blueprint('add_data', __name__)
 def add_data_func():
     packets = request.get_json()['packets']
     for packet in packets:
-        if packet.type == PacketTypes.HEART_RATE:
+        if packet['type'] == PacketTypes.HEART_RATE:
             return ingestHeartRate(packet)
-        elif packet.type == PacketTypes.ECG:
+        elif packet['type'] == PacketTypes.ECG:
             return ingestECG(packet)
-        elif packet.type == PacketTypes.BREATHING_RATE:
+        elif packet['type'] == PacketTypes.BREATHING_RATE:
             return ingestBreathingRate(packet)
-        elif packet.type == PacketTypes.TEMPERATURE:
+        elif packet['type'] == PacketTypes.TEMPERATURE:
             return ingestTemperature(packet)
-        elif packet.type == PacketTypes.BLOOD_PRESSURE:
+        elif packet['type'] == PacketTypes.BLOOD_PRESSURE:
             return ingestBloodPressure(packet)
 
+#TODO: Check if too much data storing
 def ingestECG(packet):
-    pass
+    data = parse_data(packet['data'], PacketPeriods.ECG, packet['time'])
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    return respond_success()
 
 def ingestHeartRate(packet):
-    pass
+    data = parse_data(packet['data'], PacketPeriods.HEART_RATE, packet['time'])
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'heart_rate.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    return respond_success()
 
 def ingestBreathingRate(packet):
-    pass
+    data = parse_data(packet['data'], PacketPeriods.BREATHING_RATE, packet['time'])
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'breathing_rate.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    return respond_success()
 
 def ingestTemperature(packet):
-    pass
+    data = parse_data(packet['data'], PacketPeriods.TEMPERATURE, packet['time'])
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'temperature.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    return respond_success()
 
 def ingestBloodPressure(packet):
-    pass
+    data = parse_data(packet['data'], PacketPeriods.BLOOD_PRESSURE, packet['time'])
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'blood_pressure.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    return respond_success()
+
+def parse_data(raw_data, period, starting_time):
+    data = []
+    currTime = starting_time
+    for databit in raw_data:
+        data.append({
+            'data': databit,
+            'time': currTime
+        })
+        currTime += period
+    data.reverse()
+    return data
 
 def respond_success():
     return jsonify(), 200

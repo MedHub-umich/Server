@@ -5,7 +5,7 @@
 class Config(object):
 	HOST = '127.0.0.1'
 	PORT = 3000
-	DEBUG = False
+	DEBUG = True
 	TESTING = False
 	DB_URL = "mongodb://MedHub_Server:NordicRules5@ds125906.mlab.com:25906/medhub_prod"
 	DB_NAME = "medhub_prod"
