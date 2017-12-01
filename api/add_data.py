@@ -84,7 +84,7 @@ def ingestBloodPressure(packet):
 
 def parse_data(raw_data, period, starting_time):
     data = []
-    currTime = datetime.strptime(starting_time, ‘%Y-%m-%d %H:%M:%S.%f’)
+    currTime = datetime.strptime(starting_time, "%Y-%m-%d %H:%M:%S.%f")
     for databit in raw_data:
         data.append({
             'data': databit,
