@@ -25,3 +25,21 @@ def add_data_func():
             "test": True
     }) 
     return jsonify(), 200
+
+#HELP
+# db.Users.insert({"_id": 2, 
+#     "info": {
+#         "first_name": "Tyler",
+#         "last_name": "Siegel"
+#     },
+# })
+
+#TO PUSH
+# db.Users.findOneAndUpdate({"_id": 2}, 
+#           {'$push': {'ecg.data': {
+#               '$each': [4, 5, 6],
+#               '$position': 0
+#               }
+#              }
+#          } 
+#            , {upsert: true})
