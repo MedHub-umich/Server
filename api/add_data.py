@@ -1,5 +1,6 @@
 from flask import *
 import settings
+from datetime import datetime,timedelta
 # from helpers import *
 
 db = settings.db
@@ -14,7 +15,7 @@ class PacketTypes:
 # TODO: Make real periods
 # TODO: Figure out how to modify time
 class PacketPeriods:
-    ECG = 2
+    ECG = 2lk;
     HEART_RATE = 3
     BREATHING_RATE = 4
     TEMPERATURE = 5
@@ -83,13 +84,13 @@ def ingestBloodPressure(packet):
 
 def parse_data(raw_data, period, starting_time):
     data = []
-    currTime = starting_time
+    currTime = datetime.strptime(starting_time, ‘%Y-%m-%d %H:%M:%S.%f’)
     for databit in raw_data:
         data.append({
             'data': databit,
             'time': currTime
         })
-        currTime += period
+        currTime += timedelta(microseconds=period)
     data.reverse()
     return data
 
