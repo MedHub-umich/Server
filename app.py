@@ -15,12 +15,11 @@ app.register_blueprint(api.add_data, url_prefix="/api/v1.0/add_data")
 app.register_blueprint(api.sensor_data, url_prefix="/api/v1.0/sensor")
 app.register_blueprint(api.alert, url_prefix="/api/v1.0/alert")
 
-# from apis import posts
+from pymongo import MongoClient
+mongo = MongoClient(app.config['DB_URL'])
+db = mongo[app.config['DB_NAME']]
 
-# @app.route('/')
-# @app.route('/index')
-# def index():
-#     return "Hello World"
+# from apis import posts
 
 if __name__ == '__main__':
     # listen on external IPs
