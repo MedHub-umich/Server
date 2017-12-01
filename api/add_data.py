@@ -58,27 +58,27 @@ def add_data_func():
 #TODO: Check if too much data storing
 def ingestECG(packet):
     data = parse_data(packet['data'], PacketPeriods.ECG, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0, '$slice': 7500}}} , {'upsert': True})
     return respond_success()
 
 def ingestHeartRate(packet):
     data = parse_data(packet['data'], PacketPeriods.HEART_RATE, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'heart_rate.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'heart_rate.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
 def ingestBreathingRate(packet):
     data = parse_data(packet['data'], PacketPeriods.BREATHING_RATE, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'breathing_rate.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'breathing_rate.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
 def ingestTemperature(packet):
     data = parse_data(packet['data'], PacketPeriods.TEMPERATURE, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'temperature.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'temperature.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
 def ingestBloodPressure(packet):
     data = parse_data(packet['data'], PacketPeriods.BLOOD_PRESSURE, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'blood_pressure.data': {'$each': data,'$position': 0}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'blood_pressure.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
 def parse_data(raw_data, period, starting_time):
