@@ -38,17 +38,21 @@ add_data = Blueprint('add_data', __name__)
 @add_data.route('', methods=['GET', 'POST'])
 def add_data_func():
     packets = request.get_json()['packets']
+    print(len(packets))
     for packet in packets:
+        print("here")
         if packet['type'] == PacketTypes.HEART_RATE:
-            return ingestHeartRate(packet)
+            response = ingestHeartRate(packet)
         elif packet['type'] == PacketTypes.ECG:
-            return ingestECG(packet)
+            response = ingestECG(packet)
         elif packet['type'] == PacketTypes.BREATHING_RATE:
-            return ingestBreathingRate(packet)
+            response = ingestBreathingRate(packet)
         elif packet['type'] == PacketTypes.TEMPERATURE:
-            return ingestTemperature(packet)
+            response = ingestTemperature(packet)
         elif packet['type'] == PacketTypes.BLOOD_PRESSURE:
-            return ingestBloodPressure(packet)
+            response = ingestBloodPressure(packet)
+
+    return response
 
 #TODO: Check if too much data storing
 def ingestECG(packet):
