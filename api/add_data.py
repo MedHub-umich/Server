@@ -1,4 +1,7 @@
 from flask import *
+import settings
+
+db = settings.db
 
 add_data = Blueprint('add_data', __name__)
 
@@ -16,6 +19,9 @@ add_data = Blueprint('add_data', __name__)
 #         }
 #     ]
 # }
-@add_data.route('/', methods=['POST'])
+@add_data.route('', methods=['GET', 'POST'])
 def add_data_func():
-    return "InPost"
+    db.Users.insert_one({
+            "test": True
+    }) 
+    return jsonify(), 200
