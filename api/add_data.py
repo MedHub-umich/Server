@@ -10,6 +10,8 @@ class PacketTypes:
     TEMPERATURE = 5
     BLOOD_PRESSURE = 1
 
+# TODO: Make real periods
+# TODO: Figure out how to modify time
 class PacketPeriods:
     ECG = 2
     HEART_RATE = 3
