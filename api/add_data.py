@@ -42,7 +42,6 @@ def add_data_func():
     packets = request.get_json()['packets']
     print(len(packets))
     for packet in packets:
-        print("here")
         if packet['type'] == PacketTypes.HEART_RATE:
             response = ingestHeartRate(packet)
         elif packet['type'] == PacketTypes.ECG:
