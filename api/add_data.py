@@ -97,8 +97,7 @@ def respond_success():
     return jsonify(), 200
 
 def respond_failure(message):
-    message = {"message": message}
-    return message, 500
+    return jsonify(message=message), 500
 
 
 
