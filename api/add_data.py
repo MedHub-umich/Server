@@ -57,8 +57,10 @@ def add_data_func():
 
 #TODO: Check if too much data storing
 def ingestECG(packet):
-    data = parse_data(packet['data'], PacketPeriods.ECG, packet['time'])
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0, '$slice': 7500}}} , {'upsert': True})
+    data = parse_data_ecg(packet['data'], PacketPeriods.ECG, packet['time'])
+    print("Going to send ecg data")
+    print(data)
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0, '$slice': 1200}}} , {'upsert': True})
     return respond_success()
 
 def ingestHeartRate(packet):
@@ -73,6 +75,8 @@ def ingestBreathingRate(packet):
 
 def ingestTemperature(packet):
     data = parse_data(packet['data'], PacketPeriods.TEMPERATURE, packet['time'])
+    print("Going to send temperature data")
+    print(data)
     db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'temperature.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
@@ -82,15 +86,38 @@ def ingestBloodPressure(packet):
     return respond_success()
 
 def parse_data(raw_data, period, starting_time):
-    data = []
+    data = convertDataToBytes(raw_data)
+    convertedData = []
     currTime = datetime.strptime(starting_time, "%Y-%m-%d %H:%M:%S.%f")
-    for databit in raw_data:
-        data.append({
-            'data': databit,
-            'time': str(currTime)
-        })
+    for byte in data:
+        convertedData.append({
+                'data': byte,
+                'time': str(currTime)
+            })
         currTime += timedelta(microseconds=period)
-    data.reverse()
+    convertedData.reverse()
+    return convertedData
+
+def parse_data_ecg(raw_data, period, starting_time):
+    data = convertDataToBytes(raw_data)
+    convertedData = []
+    currTime = datetime.strptime(starting_time, "%Y-%m-%d %H:%M:%S.%f")
+    for lsb, msb in zip(data[0::2], data[1::2]):
+        convertedData.append({
+                'data': convertEndian(lsb, msb),
+                'time': str(currTime)
+            })
+        currTime += timedelta(microseconds=period)
+    convertedData.reverse()
+    return convertedData
+
+def convertEndian(lsb, msb):
+    return lsb + msb * 256
+
+def convertDataToBytes(raw_data):
+    data = []
+    for msb, lsb in zip(raw_data[0::2], raw_data[1::2]):
+        data.append(int(lsb, 16) + int(msb, 16) * 16)
     return data
 
 def respond_success():
