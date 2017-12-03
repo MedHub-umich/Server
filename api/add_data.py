@@ -73,6 +73,8 @@ def ingestBreathingRate(packet):
 
 def ingestTemperature(packet):
     data = parse_data(packet['data'], PacketPeriods.TEMPERATURE, packet['time'])
+    print("Going to send temperature data")
+    print(data)
     db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'temperature.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
