@@ -95,7 +95,7 @@ function bsData() {
     data: {
         x: 'x',
         // ISO format
-       xFormat: '%Y-%m-%dT%H:%M:%S.%LZ', // 'xFormat' can be used as custom format of 'x'
+       xFormat: '%Y-%m-%d %H:%M:%S.%L', // 'xFormat' can be used as custom format of 'x'
        // Initial data 
        columns: [
             ['x'].concat(nextTime),
