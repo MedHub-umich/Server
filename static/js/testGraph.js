@@ -69,7 +69,9 @@ window.onload = function() {
 
     // MG.data_graphic(bodyTemperatureGraph)
 
-    ECGworker();
+    var ecgChart = initChart();
+
+    ECGworker(ecgChart);
 
 }
 
@@ -142,41 +144,60 @@ function addData(chart, time, distort) {
   setTimeout(addData, 1000, chart, time, distort)
 }
 
-function ECGworker() {
+function initChart() {
+  var chart = c3.generate({
+    bindto: '#ecgGraph',
+    data: {
+        x: 'x',
+        // ISO format
+       xFormat: '%Y-%m-%d %H:%M:%S.%L', // 'xFormat' can be used as custom format of 'x'
+       // Initial data 
+       columns: [
+            // ['x'].concat(nextTime),
+            // ['ecg'].concat(nextDataPoints),
+        ]
+    },
+    axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%H:%M:%S.%L', // How we want to display the time (seconds w/ milli)
+                count: 10 // How many total ticks to display
+            }
+        }
+    },
+    // Don't show the dots (looks weird with 1.2k points)
+    point: {
+      show: false
+    }
+  })
+
+  return chart;
+}
+
+function ECGworker(chart) {
   $.ajax({
-    url: '/api/v1.0/sensor/1/ecg?amount=7500', 
+    url: '/api/v1.0/sensor/1/ecg?amount=1200', 
     success: function(data) {
-    	logData(data)
+    	logData(chart, data)
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      // setTimeout(ECGworker, 5000);
-      bsData()
+      setTimeout(ECGworker, 500, chart);
+      // bsData()
     }
   });
 }
 
-function logData(response) {
-	//console.log(response.data)
-	var convertedData = ourConvert(response.data, 'time', 'data', "%Y-%m-%dT%H:%M:%S.%LZ");
-	// ecgGraph.data = convertedData
-	// delete ecgGraph.xax_format
-  // MG.data_graphic(ecgGraph)
-  var lineChartData = [
-    {
-      label: "ECG",
-      values: convertedData
-    }
-  ]
-  // var ourChart = $('#ecgGraph').epoch({
-  //   type: 'time.line',
-  //   data: [],
-  //   axes: ['bottom', 'right'],
-  //   windowSize: 7500,
-  //   historySize: 7500,
-  //   ticks: { time: 750 }
-  // });
-
+function logData(chart, response) {
+  console.log(response.data)
+  const timeArray = response.data.map((element) => element.time.slice(0, -3))
+  const dataArray = response.data.map((element)=> element.data/1000)
+	
+  chart.load({columns: [
+    ['x'].concat(timeArray),
+    ['ecg'].concat(dataArray),
+  ]})
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
