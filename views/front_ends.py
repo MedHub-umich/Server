@@ -9,3 +9,7 @@ def main_index():
 @front_ends.route('/dashboard')
 def dashboard():
     return render_template("dashboard.html")
+
+@front_ends.route('/users')
+def users():
+    return render_template("users.html")
