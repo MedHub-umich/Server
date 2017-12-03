@@ -98,20 +98,28 @@ function logData(response) {
       values: convertedData
     }
   ]
-  $('#ecgGraph').epoch({
+  var ourChart = $('#ecgGraph').epoch({
     type: 'time.line',
-    data: lineChartData
+    data: lineChartData,
+    axes: ['bottom', 'right'],
+    windowSize: 7500,
+    historySize: 7500,
+    ticks: { time: 750 }
   });
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
   //time_format = "%Y-%m-%dT%H:%M:%S.%LZ";
-  var parse_time = d3.timeParse(time_format);
+  // var parse_time = d3.timeParse(time_format);
   data = data.map(function(d) {
-    d['time'] = Date.parse(d[timeAccess])
-    d['y'] = parseInt('0x' + d[dataAccess])
-    return d;
+    a = {}
+    a['time'] = Date.parse(d[timeAccess])/1000
+    // console.log(a['time'])
+    a['y'] = parseInt('0x' + d[dataAccess])
+    // console.log(a)
+    return a;
   });
+  console.log(data.length)
   return data
 }
 
