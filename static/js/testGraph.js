@@ -74,38 +74,73 @@ window.onload = function() {
 }
 
 function bsData() {
-  var lineChartData = [
-    {
-      label: "ECG",
-      values: []
-    }
-  ]
-  var ourChart = $('#ecgGraph').epoch({
-    type: 'time.line',
-    data: lineChartData,
-    axes: ['bottom', 'right'],
-    windowSize: 7500,
-    historySize: 7500,
-    ticks: { time: 750 }
-  });
   var date = Date.parse('2017-12-01T18:16:17.249Z')/1000
   var i = 0;
   
-  addData(ourChart, date, i)
+  const nextDataPoints = Array(250).fill().map((e, i) => {
+    return i
+    
+  })
+
+  const nextTime = Array(250).fill().map((e, i) => {
+    var d = new Date(date + i)
+    return d.toISOString()
+    
+  })
+
+  // addData(date, 150)
+  // Create chart for ecg Graph
+  var chart = c3.generate({
+    bindto: '#ecgGraph',
+    data: {
+        x: 'x',
+        // ISO format
+       xFormat: '%Y-%m-%dT%H:%M:%S.%LZ', // 'xFormat' can be used as custom format of 'x'
+       // Initial data 
+       columns: [
+            ['x'].concat(nextTime),
+//            ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
+            ['ecg'].concat(nextDataPoints),
+        ]
+    },
+    axis: {
+        x: {
+            type: 'timeseries',
+            tick: {
+                format: '%S.%L', // How we want to display the time (seconds w/ milli)
+                count: 10 // How many total ticks to display
+            }
+        }
+    },
+    // Don't show the dots (looks weird with 1.2k points)
+    point: {
+      show: false
+    }
+});
+
+addData(chart, date, 150)
   
 }
 
-function addData(chart, time, i) {
-  
-  const nextDataPoint = [{
-    time: time,
-    y: i
-  }]
+function addData(chart, time, distort) {
+  const nextDataPoints = Array(1250).fill().map((e, i) => {
+    return i % distort    
+  })
+
+  const nextTime = Array(1250).fill().map((e, i) => {
+    var d = new Date(time + i)
+    return d.toISOString()    
+  })
+
   time += 1;
-  i = (i + 1);
-  console.log("called!")
-  chart.push(nextDataPoint)
-  setTimeout(addData, 1, chart, time, i % 750)
+  distort = distort === 150 ? 250 : 150
+  // Replace chart with new data
+  chart.load({columns: [
+                ['x'].concat(nextTime),
+                ['ecg'].concat(nextDataPoints),
+        ]})
+  console.log(distort)
+  setTimeout(addData, 1000, chart, time, distort)
 }
 
 function ECGworker() {
