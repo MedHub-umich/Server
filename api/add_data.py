@@ -87,7 +87,7 @@ def parse_data(raw_data, period, starting_time):
     for databit in raw_data:
         data.append({
             'data': databit,
-            'time': currTime
+            'time': str(currTime)
         })
         currTime += timedelta(microseconds=period)
     data.reverse()
