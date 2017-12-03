@@ -73,6 +73,41 @@ window.onload = function() {
 
 }
 
+function bsData() {
+  var lineChartData = [
+    {
+      label: "ECG",
+      values: []
+    }
+  ]
+  var ourChart = $('#ecgGraph').epoch({
+    type: 'time.line',
+    data: lineChartData,
+    axes: ['bottom', 'right'],
+    windowSize: 7500,
+    historySize: 7500,
+    ticks: { time: 750 }
+  });
+  var date = Date.parse('2017-12-01T18:16:17.249Z')/1000
+  var i = 0;
+  
+  addData(ourChart, date, i)
+  
+}
+
+function addData(chart, time, i) {
+  
+  const nextDataPoint = [{
+    time: time,
+    y: i
+  }]
+  time += 1;
+  i = (i + 1);
+  console.log("called!")
+  chart.push(nextDataPoint)
+  setTimeout(addData, 1, chart, time, i % 750)
+}
+
 function ECGworker() {
   $.ajax({
     url: '/api/v1.0/sensor/1/ecg?amount=7500', 
@@ -81,7 +116,8 @@ function ECGworker() {
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(ECGworker, 5000);
+      // setTimeout(ECGworker, 5000);
+      bsData()
     }
   });
 }
@@ -98,14 +134,15 @@ function logData(response) {
       values: convertedData
     }
   ]
-  var ourChart = $('#ecgGraph').epoch({
-    type: 'time.line',
-    data: lineChartData,
-    axes: ['bottom', 'right'],
-    windowSize: 7500,
-    historySize: 7500,
-    ticks: { time: 750 }
-  });
+  // var ourChart = $('#ecgGraph').epoch({
+  //   type: 'time.line',
+  //   data: [],
+  //   axes: ['bottom', 'right'],
+  //   windowSize: 7500,
+  //   historySize: 7500,
+  //   ticks: { time: 750 }
+  // });
+
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
@@ -120,7 +157,7 @@ ourConvert = function(data, timeAccess, dataAccess, time_format) {
     return a;
   });
   console.log(data.length)
-  return data
+  return data.reverse()
 }
 
 
