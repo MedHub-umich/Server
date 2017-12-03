@@ -25,6 +25,8 @@
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="static/css/demo.css" rel="stylesheet" />
 
+    <!-- CSS for Metrics Graphics -->
+    <link href="static/css/metricsgraphics.css" rel="stylesheet" />
 
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -170,16 +172,12 @@
                                 <p class="category">24 Hours performance</p>
                             </div>
                             <div class="content">
-                                <div id="chartHours" class="ct-chart"></div>
+                                <div id="myTest"></div>
                                 <div class="footer">
                                     <div class="chart-legend">
                                         <i class="fa fa-circle text-info"></i> Open
                                         <i class="fa fa-circle text-danger"></i> Click
                                         <i class="fa fa-circle text-warning"></i> Click Second Time
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-reload"></i> Updated 3 minutes ago
                                     </div>
                                 </div>
                             </div>
@@ -320,6 +318,11 @@
 
 	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 	<script src="static/js/demo.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="static/js/metricsgraphics.min.js"></script>
+
+    <script src="static/js/testGraph.js"></script>
 
 	<script type="text/javascript">
     	$(document).ready(function(){
