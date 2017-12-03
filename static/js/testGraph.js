@@ -99,7 +99,6 @@ function bsData() {
        // Initial data 
        columns: [
             ['x'].concat(nextTime),
-//            ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
             ['ecg'].concat(nextDataPoints),
         ]
     },
