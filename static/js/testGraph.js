@@ -158,17 +158,29 @@ function initChart() {
         ]
     },
     axis: {
-        x: {
-            type: 'timeseries',
-            tick: {
-                format: '%H:%M:%S.%L', // How we want to display the time (seconds w/ milli)
-                count: 10 // How many total ticks to display
-            }
+      y: {
+        // max:3.3,
+        // min: 0,
+        label: "Volts",
+        tick: {
+          format: d3.format(".2f"),
+          count: 5
         }
+      },
+      x: {
+          type: 'timeseries',
+          tick: {
+              format: '%H:%M:%S.%L', // How we want to display the time (seconds w/ milli)
+              count: 10 // How many total ticks to display
+          }
+      }
     },
     // Don't show the dots (looks weird with 1.2k points)
     point: {
       show: false
+    },
+    transition: {
+      duration: 0
     }
   })
 
