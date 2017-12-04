@@ -209,9 +209,7 @@ function logData(chart, response) {
   chart.load({columns: [
     ['x'].concat(timeArray),
     ['ecg'].concat(dataArray),
-  ], done: function(){
-    // chart.flush()
-  }})
+  ]})
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
