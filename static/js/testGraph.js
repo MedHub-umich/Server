@@ -1,6 +1,6 @@
 userID = $('#patientData').text()
 baseURL = '/api/v1.0/sensor/' + userID
-
+const numBPReadings = 5
 window.onload = function() {
     var ecgChart = initChart('#ecgGraph', "Volts")
     var ecgURL =  baseURL + '/ecg?amount=1250'
@@ -24,6 +24,10 @@ window.onload = function() {
 
 
 
+
+    BPworker();
+
+    
 
 }
 
@@ -94,6 +98,48 @@ function initChart(chartID, label) {
   return chart;
 }
 
+function BPworker() {
+  $.ajax({
+    url: '/api/v1.0/sensor/' + userID + '/blood_pressure?amount=' + numBPReadings, 
+    success: function(response) {
+    	logBP(response)
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(BPworker, 5000);
+    }
+  });
+}
+
+function logBP(response) {
+  var newHTML = "<div id=bpTable>"
+  newHTML += "<table class='table table-striped'>"
+  newHTML += "<thead>"
+  newHTML += "<th>Sys/Dia</th>"
+  newHTML += "<th>HR (BPM)</th>"
+  newHTML += "<th>Time of Reading</th>"
+  newHTML += "</thead>"
+  newHTML += "<tbody>"
+  newHTML += response.data.map((element) => {
+    const formattedTime = new Date(element.time).toLocaleString('en-US')
+    var thisRow = "<tr>"
+    thisRow += ("<td>"+ element.systolic + "/" + element.diastolic + "</td>")
+    thisRow += ("<td>" + element.heart_rate + "</td>")
+    thisRow += ("<td>" + formattedTime + "</td>")
+    thisRow += "</tr>"
+    return thisRow
+  }).reduce((prev, curr) => prev + curr)
+  newHTML += "</tbody>"
+  newHTML += "</table>"
+  newHTML += "</div>"
+  console.log(newHTML)
+  $('#bpTable').replaceWith(newHTML)
+
+  newHTML = '<div id="bp-recent">'
+  newHTML += response.data[0].systolic + '/' + response.data[0].diastolic + ' S/D'
+  newHTML += '</div>'
+  $('#bp-recent').replaceWith(newHTML)
+}
 
 
 //temperature is sent 1 per minute  referesh 29 seconds  get 20
