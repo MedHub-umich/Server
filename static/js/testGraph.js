@@ -1,4 +1,5 @@
 userID = $('#patientData').text()
+const numBPReadings = 5
 window.onload = function() {
 	
 
@@ -15,6 +16,8 @@ window.onload = function() {
 
     var ecgChart = initChart();
     ECGworker(ecgChart);
+
+    
 
 }
 
@@ -143,6 +146,19 @@ function ECGworker(chart) {
   });
 }
 
+function BPworker() {
+  $.ajax({
+    url: '/api/v1.0/sensor/' + userID + '/blood_pressure?amount=' + numBPReadings, 
+    success: function(response) {
+    	logBP(response)
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(BPworker, 5000, chart);
+    }
+  });
+}
+
 function logData(chart, response) {
   console.log(response.data)
   const timeArray = response.data.map((element) => element.time.slice(0, -3))
@@ -152,6 +168,14 @@ function logData(chart, response) {
     ['x'].concat(timeArray),
     ['ecg'].concat(dataArray),
   ]})
+}
+
+function logBP(response) {
+  var newHTML = "<thead>"
+  newHTML += "<th>Patient Number</th>"
+  newHTML += "<th>Name</th>"
+  newHTML += "<th>Last Check-In</th>"
+  newHTML += "</thead>"
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
