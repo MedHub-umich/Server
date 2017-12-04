@@ -12,7 +12,7 @@ def main_index():
 def dashboard():
     options = {
         "userID": int(request.args.get('userID'))
-    }
+        }
     return render_template("dashboard.html", **options)
 
 @front_ends.route('/users')
