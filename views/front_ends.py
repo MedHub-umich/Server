@@ -10,7 +10,10 @@ def main_index():
 
 @front_ends.route('/user')
 def dashboard():
-    return render_template("dashboard.html")
+    options = {
+        "userID": int(request.args.get('userID'))
+    }
+    return render_template("dashboard.html", **options)
 
 @front_ends.route('/users')
 def users():

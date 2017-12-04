@@ -20,7 +20,6 @@ def get_sensor_data(user, data_type):
 		print("Negative amount is bad!")
 		amount = 0
 	return jsonify(data=res[0][data_type]["data"][0:amount]), 200
-    
 
 def respond_failure(message):
     return jsonify(message=message), 500
