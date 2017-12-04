@@ -21,19 +21,5 @@ def get_sensor_data(user, data_type):
 		amount = 0
 	return jsonify(data=res[0][data_type]["data"][0:amount]), 200
 
-@sensor_data.route('/get_users', methods=['GET'])
-def get_users():
-	users = db.Users.find({})
-	usersReturn = []
-	for user in users:
-		userReturn = {
-			'id': user['_id'],
-			'name': user['info']['first_name'] + " " + user['info']['last_name'],
-			'lastAccess': '2 Minutes Ago'
-		}
-		usersReturn.append(userReturn)
-
-	return jsonify(patients=usersReturn), 200
-
 def respond_failure(message):
     return jsonify(message=message), 500
