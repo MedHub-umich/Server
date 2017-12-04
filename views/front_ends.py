@@ -30,8 +30,10 @@ def users():
 			'userLink': 'user?userID=' + str(user['_id'])
 		}
 		users.append(userReturn)
+	users.reverse()
 	options = {
-		"users": users
+		"users": users,
+		"numUsers": len(users)
 	}
 	print(options)
 	return render_template("users.html", **options)
