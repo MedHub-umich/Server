@@ -22,13 +22,7 @@ window.onload = function() {
     var heartRateUpdateRate = 4000
     worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1)
 
-
-
-
     BPworker();
-
-    
-
 }
 
 function worker(chart, dataURL, timeout, type, scaling) {
