@@ -1,95 +1,48 @@
 userID = $('#patientData').text()
+baseURL = '/api/v1.0/sensor/' + userID
+
 window.onload = function() {
-	
+    // var ecgChart = initChart('#ecgGraph')
+    // var ecgURL =  baseURL + '/ecg?amount=1250'
+    // var ecgUpdateRate = 5000
+    // worker(ecgChart, ecgURL, ecgUpdateRate);
 
+    var tempChart = initChart('#bodyTemperatureGraph')
+    var tempURL = baseURL + '/temperature?amount=20'
+    var tempUpdateRate = 2900
+    worker(tempChart, tempURL, tempUpdateRate, "temperature")
 
-    // MG.data_graphic(ecgGraph);
-
-    // MG.data_graphic(bpGraph);
-
-    // MG.data_graphic(heartRateGraph);
-
-    // MG.data_graphic(breathingRateGraph)
-
-    // MG.data_graphic(bodyTemperatureGraph)
-
-    var ecgChart = initChart();
-    ECGworker(ecgChart);
 
 }
 
-function bsData() {
-  var date = Date.parse('2017-12-01T18:16:17.249Z')/1000
-  var i = 0;
-  
-  const nextDataPoints = Array(250).fill().map((e, i) => {
-    return i
-    
-  })
-
-  const nextTime = Array(250).fill().map((e, i) => {
-    var d = new Date(date + i)
-    return d.toISOString()
-    
-  })
-
-  // addData(date, 150)
-  // Create chart for ecg Graph
-  var chart = c3.generate({
-    bindto: '#ecgGraph',
-    data: {
-        x: 'x',
-        // ISO format
-       xFormat: '%Y-%m-%d %H:%M:%S.%L', // 'xFormat' can be used as custom format of 'x'
-       // Initial data 
-       columns: [
-            ['x'].concat(nextTime),
-            ['ecg'].concat(nextDataPoints),
-        ]
+function worker(chart, dataURL, timeout, type) {
+  $.ajax({
+    url: dataURL, 
+    success: function(data) {
+    	plotData(chart, data, type)
     },
-    axis: {
-        x: {
-            type: 'timeseries',
-            tick: {
-                format: '%S.%L', // How we want to display the time (seconds w/ milli)
-                count: 10 // How many total ticks to display
-            }
-        }
-    },
-    // Don't show the dots (looks weird with 1.2k points)
-    point: {
-      show: false
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(worker, timeout, chart, dataURL, timeout, type);
+      // bsData()
     }
-});
-
-addData(chart, date, 150)
-  
+  });
 }
 
-function addData(chart, time, distort) {
-  const nextDataPoints = Array(1250).fill().map((e, i) => {
-    return i % distort    
-  })
-
-  const nextTime = Array(1250).fill().map((e, i) => {
-    var d = new Date(time + i)
-    return d.toISOString()    
-  })
-
-  time += 1;
-  distort = distort === 150 ? 250 : 150
-  // Replace chart with new data
+function plotData(chart, response, type) {
+  console.log(response.data)
+  const timeArray = response.data.map((element) => element.time.slice(0, -3))
+  const dataArray = response.data.map((element)=> element.data/1000)
+	
   chart.load({columns: [
-                ['x'].concat(nextTime),
-                ['ecg'].concat(nextDataPoints),
-        ]})
-  console.log(distort)
-  setTimeout(addData, 1000, chart, time, distort)
+    ['x'].concat(timeArray),
+    [type].concat(dataArray),
+  ]})
 }
 
-function initChart() {
+function initChart(chartID) {
   var chart = c3.generate({
-    bindto: '#ecgGraph',
+    bindto: chartID,
     data: {
         x: 'x',
         // ISO format
@@ -129,45 +82,9 @@ function initChart() {
   return chart;
 }
 
-function ECGworker(chart) {
-  $.ajax({
-    url: '/api/v1.0/sensor/' + userID + '/ecg?amount=1250', 
-    success: function(data) {
-    	logData(chart, data)
-    },
-    complete: function() {
-      // Schedule the next request when the current one's complete
-      setTimeout(ECGworker, 5000, chart);
-      // bsData()
-    }
-  });
-}
-
-function logData(chart, response) {
-  console.log(response.data)
-  const timeArray = response.data.map((element) => element.time.slice(0, -3))
-  const dataArray = response.data.map((element)=> element.data/1000)
-	
-  chart.load({columns: [
-    ['x'].concat(timeArray),
-    ['ecg'].concat(dataArray),
-  ]})
-}
-
-ourConvert = function(data, timeAccess, dataAccess, time_format) {
-  //time_format = "%Y-%m-%dT%H:%M:%S.%LZ";
-  // var parse_time = d3.timeParse(time_format);
-  data = data.map(function(d) {
-    a = {}
-    a['time'] = Date.parse(d[timeAccess])/1000
-    // console.log(a['time'])
-    a['y'] = parseInt('0x' + d[dataAccess])
-    // console.log(a)
-    return a;
-  });
-  console.log(data.length)
-  return data.reverse()
-}
 
 
+//temperature is sent 1 per minute  referesh 29 seconds  get 20
+//breahing rate is sent 1 per minute referse 29 seconds get 20
+//heart rate 1 per 10 seconds refresh 4 seoncs  get 30
 
