@@ -1974,11 +1974,11 @@
 		-webkit-appearance: none;
 		-ms-appearance: none;
 		appearance: none;
-		background: #6cc091;
+		background: #FFFFFF;
 		border-radius: 10px;
 		border: none;
-		border: solid 2px #8dcca9;
-		color: #fff;
+		border: solid 2px #000000;
+		color: #000000;
 		display: block;
 		outline: 0;
 		padding: 0 1em;
