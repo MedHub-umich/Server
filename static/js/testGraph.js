@@ -17,6 +17,8 @@ window.onload = function() {
     var ecgChart = initChart();
     ECGworker(ecgChart);
 
+    BPworker();
+
     
 
 }
@@ -154,7 +156,7 @@ function BPworker() {
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(BPworker, 5000, chart);
+      setTimeout(BPworker, 5000);
     }
   });
 }
@@ -171,11 +173,28 @@ function logData(chart, response) {
 }
 
 function logBP(response) {
-  var newHTML = "<thead>"
-  newHTML += "<th>Patient Number</th>"
-  newHTML += "<th>Name</th>"
-  newHTML += "<th>Last Check-In</th>"
+  var newHTML = "<div id=bpTable>"
+  newHTML += "<table class='table table-striped'>"
+  newHTML += "<thead>"
+  newHTML += "<th>Sys/Dia</th>"
+  newHTML += "<th>HR (BPM)</th>"
+  newHTML += "<th>Time of Reading</th>"
   newHTML += "</thead>"
+  newHTML += "<tbody>"
+  newHTML += response.data.map((element) => {
+    const formattedTime = new Date(element.time).toLocaleString('en-US')
+    var thisRow = "<tr>"
+    thisRow += ("<td>"+ element.systolic + "/" + element.diastolic + "</td>")
+    thisRow += ("<td>" + element.heart_rate + "</td>")
+    thisRow += ("<td>" + formattedTime + "</td>")
+    thisRow += "</tr>"
+    return thisRow
+  }).reduce((prev, curr) => prev + curr)
+  newHTML += "</tbody>"
+  newHTML += "</table>"
+  newHTML += "</div>"
+  console.log(newHTML)
+  $('#bpTable').replaceWith(newHTML)
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
