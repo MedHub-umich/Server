@@ -2,37 +2,49 @@ userID = $('#patientData').text()
 baseURL = '/api/v1.0/sensor/' + userID
 
 window.onload = function() {
-    // var ecgChart = initChart('#ecgGraph')
-    // var ecgURL =  baseURL + '/ecg?amount=1250'
-    // var ecgUpdateRate = 5000
-    // worker(ecgChart, ecgURL, ecgUpdateRate);
+    var ecgChart = initChart('#ecgGraph', "Volts")
+    var ecgURL =  baseURL + '/ecg?amount=1250'
+    var ecgUpdateRate = 5000
+    worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000);
 
-    var tempChart = initChart('#bodyTemperatureGraph')
+    var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius")
     var tempURL = baseURL + '/temperature?amount=20'
-    var tempUpdateRate = 2900
-    worker(tempChart, tempURL, tempUpdateRate, "temperature")
+    var tempUpdateRate = 29000
+    worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1)
+
+    var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute")
+    var breathingURL = baseURL + '/breathing_rate?amount=20'
+    var breathingUpdateRate = 29000
+    worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1)
+
+    var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute")
+    var heartRateURL = baseURL + '/heart_rate?amount=30'
+    var heartRateUpdateRate = 4000
+    worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1)
+
+
 
 
 }
 
-function worker(chart, dataURL, timeout, type) {
+function worker(chart, dataURL, timeout, type, scaling) {
   $.ajax({
     url: dataURL, 
     success: function(data) {
-    	plotData(chart, data, type)
+    	plotData(chart, data, type, scaling)
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(worker, timeout, chart, dataURL, timeout, type);
+      setTimeout(worker, timeout, chart, dataURL, timeout, type, scaling);
       // bsData()
     }
   });
 }
 
-function plotData(chart, response, type) {
+function plotData(chart, response, type, scaling) {
   console.log(response.data)
   const timeArray = response.data.map((element) => element.time.slice(0, -3))
-  const dataArray = response.data.map((element)=> element.data/1000)
+  const dataArray = response.data.map((element)=> element.data/scaling)
 	
   chart.load({columns: [
     ['x'].concat(timeArray),
@@ -40,7 +52,7 @@ function plotData(chart, response, type) {
   ]})
 }
 
-function initChart(chartID) {
+function initChart(chartID, label) {
   var chart = c3.generate({
     bindto: chartID,
     data: {
@@ -57,7 +69,7 @@ function initChart(chartID) {
       y: {
         // max:3.3,
         // min: 0,
-        label: "Volts",
+        label: label,
         tick: {
           format: d3.format(".2f"),
           count: 5
