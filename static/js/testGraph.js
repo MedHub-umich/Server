@@ -195,6 +195,11 @@ function logBP(response) {
   newHTML += "</div>"
   console.log(newHTML)
   $('#bpTable').replaceWith(newHTML)
+
+  newHTML = '<div id="bp-recent">'
+  newHTML += response.data[0].systolic + '/' + response.data[0].diastolic + ' S/D'
+  newHTML += '</div>'
+  $('#bp-recent').replaceWith(newHTML)
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {
