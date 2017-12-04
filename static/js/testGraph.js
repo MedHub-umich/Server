@@ -180,7 +180,7 @@ function initChart() {
       show: false
     },
     transition: {
-      duration: 0
+      duration: 350
     }
   })
 
@@ -189,13 +189,13 @@ function initChart() {
 
 function ECGworker(chart) {
   $.ajax({
-    url: '/api/v1.0/sensor/1/ecg?amount=1200', 
+    url: '/api/v1.0/sensor/1/ecg?amount=1250', 
     success: function(data) {
     	logData(chart, data)
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(ECGworker, 500, chart);
+      setTimeout(ECGworker, 5000, chart);
       // bsData()
     }
   });
@@ -209,7 +209,9 @@ function logData(chart, response) {
   chart.load({columns: [
     ['x'].concat(timeArray),
     ['ecg'].concat(dataArray),
-  ]})
+  ], done: function(){
+    // chart.flush()
+  }})
 }
 
 ourConvert = function(data, timeAccess, dataAccess, time_format) {

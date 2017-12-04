@@ -60,7 +60,7 @@ def ingestECG(packet):
     data = parse_data_ecg(packet['data'], PacketPeriods.ECG, packet['time'])
     print("Going to send ecg data")
     print(data)
-    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0, '$slice': 1200}}} , {'upsert': True})
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'ecg.data': {'$each': data,'$position': 0, '$slice': 1500}}} , {'upsert': True})
     return respond_success()
 
 def ingestHeartRate(packet):
