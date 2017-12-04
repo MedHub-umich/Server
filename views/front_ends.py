@@ -6,14 +6,17 @@ db = settings.db
 
 @front_ends.route('/')
 def main_index():
-    return render_template("index.html")
+	return render_template("index.html")
 
 @front_ends.route('/user')
 def dashboard():
-    options = {
-        "userID": int(request.args.get('userID'))
-        }
-    return render_template("user.html", **options)
+	userID = int(request.args.get('userID'))
+	ourUser = db.Users.find({'_id': userID})
+	options = {
+		"userID": userID,
+		"name": ourUser[0]['info']['first_name'] + " " + ourUser[0]['info']['last_name']
+	}
+	return render_template("user.html", **options)
 
 @front_ends.route('/users')
 def users():
@@ -34,7 +37,7 @@ def users():
 	return render_template("users.html", **options)
 
 def findLastTimestamp(user):
-    if 'ecg' in user and user['ecg']['data']:
-        return user['ecg']['data'][0]['time']
-    else :
-        return "No Check in Found"
+	if 'ecg' in user and user['ecg']['data']:
+		return user['ecg']['data'][0]['time']
+	else :
+		return "No Check in Found"

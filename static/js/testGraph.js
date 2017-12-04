@@ -1,60 +1,4 @@
-
-// var ecgGraph = {
-//         title: "",
-//         description: "Yearly UFO sightings from the year 1945 to 2010.",
-//         // data:jsonData1,
-//         width: 1100,
-//         height: 250,
-//         target: '#ecgGraph',
-//         x_accessor: 'time',
-//         y_accessor: 'data',
-//         area: false,
-//         markers: [{'year': 1964, 'label': '"The Creeping Terror" released'}]
-//     }
-// var bpGraph = {
-//         title: "UFO Sightings",
-//         description: "Yearly UFO sightings from the year 1945 to 2010.",
-//         data: jsonData,
-//         width: 500,
-//         height: 250,
-//         target: '#bpGraph',
-//         x_accessor: 'year',
-//         y_accessor: 'sightings',
-//         markers: [{'year': 1964, 'label': '"The Creeping Terror" released'}]
-//     }
-// var breathingRateGraph = {
-//         title: "UFO Sightings",
-//         description: "Yearly UFO sightings from the year 1945 to 2010.",
-//         data: jsonData,
-//         width: 500,
-//         height: 250,
-//         target: '#breathingRateGraph',
-//         x_accessor: 'year',
-//         y_accessor: 'sightings',
-//         markers: [{'year': 1964, 'label': '"The Creeping Terror" released'}]
-//     }
-// var heartRateGraph = {
-//         title: "UFO Sightings",
-//         description: "Yearly UFO sightings from the year 1945 to 2010.",
-//         data: jsonData,
-//         width: 500,
-//         height: 250,
-//         target: '#heartRateGraph',
-//         x_accessor: 'year',
-//         y_accessor: 'sightings',
-//         markers: [{'year': 1964, 'label': '"The Creeping Terror" released'}]
-//     }
-// var bodyTemperatureGraph = {
-//         title: "UFO Sightings",
-//         description: "Yearly UFO sightings from the year 1945 to 2010.",
-//         data: jsonData,
-//         width: 500,
-//         height: 250,
-//         target: '#bodyTemperatureGraph',
-//         x_accessor: 'year',
-//         y_accessor: 'sightings',
-//         markers: [{'year': 1964, 'label': '"The Creeping Terror" released'}]
-//     }
+userID = $('#patientData').text()
 window.onload = function() {
 	
 
@@ -70,7 +14,6 @@ window.onload = function() {
     // MG.data_graphic(bodyTemperatureGraph)
 
     var ecgChart = initChart();
-
     ECGworker(ecgChart);
 
 }
@@ -183,13 +126,12 @@ function initChart() {
       duration: 350
     }
   })
-
   return chart;
 }
 
 function ECGworker(chart) {
   $.ajax({
-    url: '/api/v1.0/sensor/1/ecg?amount=1250', 
+    url: '/api/v1.0/sensor/' + userID + '/ecg?amount=1250', 
     success: function(data) {
     	logData(chart, data)
     },
