@@ -1,4 +1,8 @@
 from flask import *
+import settings
+from datetime import datetime
+
+db = settings.db
 
 alert = Blueprint('alert', __name__)
 
@@ -10,6 +14,21 @@ alert = Blueprint('alert', __name__)
 @alert.route('/<user>', methods=['GET', 'POST'])
 def get_alert(user):
     if request.method == 'POST':
+        ourJson = request.get_json()
+        alert_type = int(ourJson['type'])
+        alert_data = ourJson['data']
+        db.Users.find_one_and_update({"_id": int(user)}, 
+          {'$push': {'info.alerts': {
+              '$each': [{
+                  'type': alert_type,
+                  'data': alert_data,
+                  'time': str(datetime.now())
+              }],
+              '$position': 0
+              }
+             }
+         } 
+           , {'upsert': True})
         return respond_success()
     else:
         return respond_failure("Not implemented!")
@@ -22,4 +41,12 @@ def respond_success():
 def respond_failure(message):
     return jsonify(message=message), 500
 
+# db.Users.findOneAndUpdate({"_id": 2}, 
+#           {'$push': {'ecg.data': {
+#               '$each': [4, 5, 6],
+#               '$position': 0
+#               }
+#              }
+#          } 
+#            , {upsert: true})
 
