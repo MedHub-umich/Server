@@ -135,6 +135,10 @@ function logBP(response) {
   $('#bp-recent').replaceWith(newHTML)
 }
 
+$('#mh-alert').click(function() {
+  console.log("RUN TOM RUN!")
+})
+
 
 //temperature is sent 1 per minute  referesh 29 seconds  get 20
 //breahing rate is sent 1 per minute referse 29 seconds get 20
