@@ -15,13 +15,13 @@ alert = Blueprint('alert', __name__)
 def get_alert(user):
     if request.method == 'POST':
         ourJson = request.get_json()
-        alert_type = int(ourJson['type'])
-        alert_data = ourJson['data']
+        alertType = int(ourJson['type'])
+        alertData = ourJson['data']
         db.Users.find_one_and_update({"_id": int(user)}, 
           {'$push': {'info.alerts': {
               '$each': [{
-                  'type': alert_type,
-                  'data': alert_data,
+                  'type': alertType,
+                  'data': alertData,
                   'time': str(datetime.now())
               }],
               '$position': 0
@@ -31,8 +31,13 @@ def get_alert(user):
            , {'upsert': True})
         return respond_success()
     else:
-        return respond_failure("Not implemented!")
-
+        res = db.Users.find({"_id": int(user)})
+        alertsForUser = res[0]['info']['alerts']
+        if (alertsForUser == []) :
+            return jsonify(), 203
+        db.Users.find_one_and_update({"_id": int(user)}, { "$set": { "info.alerts": [] }})
+        print alertsForUser
+        return jsonify(alerts=alertsForUser), 200
 
 
 def respond_success():
