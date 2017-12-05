@@ -40,7 +40,6 @@ function worker(chart, dataURL, timeout, type, scaling) {
 }
 
 function plotData(chart, response, type, scaling) {
-  console.log(response.data)
   const timeArray = response.data.map((element) => element.time.slice(0, -3))
   const dataArray = response.data.map((element)=> element.data/scaling)
 	
@@ -126,7 +125,6 @@ function logBP(response) {
   newHTML += "</tbody>"
   newHTML += "</table>"
   newHTML += "</div>"
-  console.log(newHTML)
   $('#bpTable').replaceWith(newHTML)
 
   newHTML = '<div id="bp-recent">'
@@ -137,6 +135,17 @@ function logBP(response) {
 
 $('#mh-alert').click(function() {
   console.log("RUN TOM RUN!")
+  const dataToSend = JSON.stringify({
+    'type': 1,
+    'data': "0x01"
+  })
+  $.ajax({
+    url: '/api/v1.0/alert/' + userID, 
+    method: "POST",
+    data: dataToSend,
+    dataType: "json",
+    contentType: "application/json"
+  });
 })
 
 
