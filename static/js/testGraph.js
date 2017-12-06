@@ -137,7 +137,21 @@ $('#mh-alert').click(function() {
   console.log("RUN TOM RUN!")
   const dataToSend = JSON.stringify({
     'type': 1,
-    'data': "0x01"
+    'data': "0x1"
+  })
+  $.ajax({
+    url: '/api/v1.0/alert/' + userID, 
+    method: "POST",
+    data: dataToSend,
+    dataType: "json",
+    contentType: "application/json"
+  });
+})
+
+$('#mh-schedule').click(function() {
+  const dataToSend = JSON.stringify({
+    'type': 1,
+    'data': "0x2"
   })
   $.ajax({
     url: '/api/v1.0/alert/' + userID, 
