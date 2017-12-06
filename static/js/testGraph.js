@@ -145,6 +145,7 @@ $('#mh-alert').click(function() {
     dataType: "json",
     contentType: "application/json"
   });
+  this.blur()
 })
 
 $('#mh-schedule').click(function() {
@@ -158,6 +159,7 @@ $('#mh-schedule').click(function() {
     dataType: "json",
     contentType: "application/json"
   });
+  this.blur()
 })
 
 $('#mh-monitor').click(function() {
@@ -171,6 +173,7 @@ $('#mh-monitor').click(function() {
     dataType: "json",
     contentType: "application/json"
   });
+  this.blur()
 })
 
 
