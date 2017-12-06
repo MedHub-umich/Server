@@ -5,41 +5,50 @@ window.onload = function() {
     var ecgChart = initChart('#ecgGraph', "Volts")
     var ecgURL =  baseURL + '/ecg?amount=1250'
     var ecgUpdateRate = 5000
-    worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000);
-
+    worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000, function (data) {
+    })
     var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius")
     var tempURL = baseURL + '/temperature?amount=20'
     var tempUpdateRate = 29000
-    worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1)
+    worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1, function (data) {
+      var updateStr = data + " ˚ Celsius"
+      $('#tempUpdate').text(updateStr)
+    })
 
     var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute")
     var breathingURL = baseURL + '/breathing_rate?amount=20'
     var breathingUpdateRate = 29000
-    worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1)
-
+    worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1, function (data) {
+      var updateStr = data + " BPM"
+      $('#brUpdate').text(updateStr)
+    })
     var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute")
     var heartRateURL = baseURL + '/heart_rate?amount=30'
     var heartRateUpdateRate = 4000
-    worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1)
+    worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1, function (data) {
+      var updateStr = data + " BPM"
+      $('#hrUpdate').text(updateStr)
+    })
+
 
     BPworker();
 }
 
-function worker(chart, dataURL, timeout, type, scaling) {
+function worker(chart, dataURL, timeout, type, scaling, updateFcn) {
   $.ajax({
     url: dataURL, 
     success: function(data) {
-    	plotData(chart, data, type, scaling)
+    	plotData(chart, data, type, scaling, updateFcn)
     },
     complete: function() {
       // Schedule the next request when the current one's complete
-      setTimeout(worker, timeout, chart, dataURL, timeout, type, scaling);
+      setTimeout(worker, timeout, chart, dataURL, timeout, type, scaling, updateFcn);
       // bsData()
     }
   });
 }
 
-function plotData(chart, response, type, scaling) {
+function plotData(chart, response, type, scaling, updateFcn) {
   const timeArray = response.data.map((element) => element.time.slice(0, -3))
   const dataArray = response.data.map((element)=> element.data/scaling)
 	
@@ -47,6 +56,7 @@ function plotData(chart, response, type, scaling) {
     ['x'].concat(timeArray),
     [type].concat(dataArray),
   ]})
+  updateFcn(dataArray[0])
 }
 
 function initChart(chartID, label) {
