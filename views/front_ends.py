@@ -30,7 +30,6 @@ def users():
 			'userLink': 'user?userID=' + str(user['_id'])
 		}
 		users.append(userReturn)
-	users.reverse()
 	options = {
 		"users": users,
 		"numUsers": len(users)
