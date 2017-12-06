@@ -15,7 +15,6 @@ alert = Blueprint('alert', __name__)
 def get_alert(user):
     if request.method == 'POST':
         ourJson = request.get_json()
-        print ourJson
         alertType = int(ourJson['type'])
         alertData = ourJson['data']
         db.Users.find_one_and_update({"_id": int(user)}, 
@@ -37,7 +36,6 @@ def get_alert(user):
         if (alertsForUser == []) :
             return jsonify(), 203
         db.Users.find_one_and_update({"_id": int(user)}, { "$set": { "info.alerts": [] }})
-        print alertsForUser
         return jsonify(alerts=alertsForUser), 200
 
 
