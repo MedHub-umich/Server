@@ -11,7 +11,7 @@ window.onload = function() {
     var tempURL = baseURL + '/temperature?amount=20'
     var tempUpdateRate = 29000
     worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1, function (data) {
-      var updateStr = data + " ˚ Celsius"
+      var updateStr = data + "˚ Celsius"
       $('#tempUpdate').text(updateStr)
     })
 
