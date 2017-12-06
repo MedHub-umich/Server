@@ -14,8 +14,8 @@ def get_sensor_data(user, data_type):
 	if (res.count() != 1):
 		print("invalid user")
 		return respond_failure("invalid user")
-	if (amount > len(res[0][data_type]["data"]) - 1):
-		amount = len(res[0][data_type]["data"]) - 1
+	if (amount > len(res[0][data_type]["data"])):
+		amount = len(res[0][data_type]["data"])
 	elif(amount < 0):
 		print("Negative amount is bad!")
 		amount = 0
