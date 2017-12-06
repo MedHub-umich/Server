@@ -2,12 +2,12 @@ userID = $('#patientData').text()
 baseURL = '/api/v1.0/sensor/' + userID
 const numBPReadings = 5
 window.onload = function() {
-    var ecgChart = initChart('#ecgGraph', "Volts")
+    var ecgChart = initChart('#ecgGraph', "Volts", 1.3, 2.3)
     var ecgURL =  baseURL + '/ecg?amount=1250'
     var ecgUpdateRate = 500
     worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000, function (data) {
     })
-    var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius")
+    var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius", 30, 36)
     var tempURL = baseURL + '/temperature?amount=20'
     var tempUpdateRate = 10000
     worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1, function (data) {
@@ -15,14 +15,14 @@ window.onload = function() {
       $('#tempUpdate').text(updateStr)
     })
 
-    var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute")
+    var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute", 7, 16)
     var breathingURL = baseURL + '/breathing_rate?amount=20'
     var breathingUpdateRate = 10000
     worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1, function (data) {
       var updateStr = data + " BPM"
       $('#brUpdate').text(updateStr)
     })
-    var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute")
+    var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute", 40, 100)
     var heartRateURL = baseURL + '/heart_rate?amount=30'
     var heartRateUpdateRate = 4000
     worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1, function (data) {
@@ -59,7 +59,7 @@ function plotData(chart, response, type, scaling, updateFcn) {
   updateFcn(dataArray[0])
 }
 
-function initChart(chartID, label) {
+function initChart(chartID, label, ymin, ymax) {
   var chart = c3.generate({
     bindto: chartID,
     data: {
@@ -74,8 +74,8 @@ function initChart(chartID, label) {
     },
     axis: {
       y: {
-        // max:3.3,
-        // min: 0,
+        max: ymax,
+        min: ymin,
         label: label,
         tick: {
           format: d3.format(".2f"),
