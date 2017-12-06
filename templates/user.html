@@ -180,13 +180,20 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="header">
-                                <h4 class="title">ECG Signal</h4>
-                                <p class="category">Last 5 Seconds</p>
-                            </div>
+                                <div class="header">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                    <h4 class="title">ECG Signal</h4>
+                                    <p class="category">Last 5 Seconds</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                    <button class="btn btn-danger" id="mh-alert">Alert!</button>         
+                                    </div>
+                                </div>
                             <div class="content">
                                 <div id="ecgGraph" class="epoch epoch-theme-dark" style="width: inherited; height: 200px"></div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
