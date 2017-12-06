@@ -39,8 +39,6 @@ def get_alert(user):
 @alert.route('/panic/<user>', methods=['GET', 'POST'])
 def get_panic(user):
     if request.method == 'POST':
-        ourJson = request.get_json()
-        alertData = ourJson['data']
         db.Users.find_one_and_update({"_id": int(user)}, {'$set': {'info.panic': True}}, {'upsert': True})
         return respond_success()
     else:

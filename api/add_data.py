@@ -11,6 +11,7 @@ class PacketTypes:
     BREATHING_RATE = 4
     TEMPERATURE = 5
     BLOOD_PRESSURE = 1
+    PANIC = 6
 
 # TODO: Make real periods
 # TODO: Figure out how to modify time
@@ -52,6 +53,8 @@ def add_data_func():
             response = ingestTemperature(packet)
         elif packet['type'] == PacketTypes.BLOOD_PRESSURE:
             response = ingestBloodPressure(packet)
+        elif packet['type'] == PacketTypes.PANIC:
+            response = ingestPanic(packet)
 
     return response
 
@@ -84,6 +87,11 @@ def ingestBloodPressure(packet):
     data = parse_data_bp(packet['data'], PacketPeriods.BLOOD_PRESSURE, packet['time'])
     db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'blood_pressure.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
+
+def ingestPanic(packet):
+    db.Users.find_one_and_update({"_id": packet['user']}, {'$set': {'info.panic': True}}, {'upsert': True})
+    return respond_success()
+
 
 def parse_data(raw_data, period, starting_time):
     data = convertDataToBytes(raw_data)
