@@ -197,22 +197,26 @@ $('#mh-monitor').click(function() {
   this.blur()
 })
 
-function showNotification(from, align){
+function showPanicToast(){
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": false,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "0",
+    "timeOut": "0",
+    "extendedTimeOut": "0",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
 
-	$.notify({
-    	icon: "fa fa-exclamation-triangle",
-    	message: "This is the panic button!"
-    },{
-        type: 'danger',
-        timer: 2000,
-        placement: {
-            from: from,
-            align: align
-        }
-    });
+  toastr.error("This patient has recent pressed their panic button!", "Panic button enabled")  
 }
-
-
 //temperature is sent 1 per minute  referesh 29 seconds  get 20
 //breahing rate is sent 1 per minute referse 29 seconds get 20
 //heart rate 1 per 10 seconds refresh 4 seoncs  get 30
