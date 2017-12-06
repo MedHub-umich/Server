@@ -100,6 +100,12 @@ function BPworker() {
     complete: function() {
       // Schedule the next request when the current one's complete
       setTimeout(BPworker, 5000);
+    },
+    error: function() {
+      var newHTML = "<div id=bpTable>"
+      newHTML += "<p>No User Data found for Blood Pressure</p>" 
+      newHTML += '</div>'
+      $('#bpTable').replaceWith(newHTML)
     }
   });
 }
@@ -175,6 +181,21 @@ $('#mh-monitor').click(function() {
   });
   this.blur()
 })
+
+function showNotification(from, align){
+
+	$.notify({
+    	icon: "fa fa-exclamation-triangle",
+    	message: "This is the panic button!"
+    },{
+        type: 'danger',
+        timer: 2000,
+        placement: {
+            from: from,
+            align: align
+        }
+    });
+}
 
 
 //temperature is sent 1 per minute  referesh 29 seconds  get 20
