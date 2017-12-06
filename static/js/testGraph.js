@@ -4,12 +4,12 @@ const numBPReadings = 5
 window.onload = function() {
     var ecgChart = initChart('#ecgGraph', "Volts")
     var ecgURL =  baseURL + '/ecg?amount=1250'
-    var ecgUpdateRate = 5000
+    var ecgUpdateRate = 500
     worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000, function (data) {
     })
     var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius")
     var tempURL = baseURL + '/temperature?amount=20'
-    var tempUpdateRate = 29000
+    var tempUpdateRate = 10000
     worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1, function (data) {
       var updateStr = data + " ˚ Celsius"
       $('#tempUpdate').text(updateStr)
@@ -17,7 +17,7 @@ window.onload = function() {
 
     var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute")
     var breathingURL = baseURL + '/breathing_rate?amount=20'
-    var breathingUpdateRate = 29000
+    var breathingUpdateRate = 10000
     worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1, function (data) {
       var updateStr = data + " BPM"
       $('#brUpdate').text(updateStr)
@@ -116,6 +116,11 @@ function BPworker() {
       newHTML += "<p>No User Data found for Blood Pressure</p>" 
       newHTML += '</div>'
       $('#bpTable').replaceWith(newHTML)
+
+      newHTML = '<div id="bp-recent">'
+      newHTML += 'No Data'
+      newHTML += '</div>'
+      $('#bp-recent').replaceWith(newHTML)
     }
   });
 }
