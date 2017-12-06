@@ -32,6 +32,7 @@ window.onload = function() {
 
 
     BPworker();
+    WaitForPanicWorker();
 }
 
 function worker(chart, dataURL, timeout, type, scaling, updateFcn) {
@@ -121,6 +122,21 @@ function BPworker() {
       newHTML += 'No Data'
       newHTML += '</div>'
       $('#bp-recent').replaceWith(newHTML)
+    }
+  });
+}
+
+function WaitForPanicWorker() {
+  $.ajax({
+    url: '/api/v1.0/alert/panic/' + userID, 
+    success: function(response) {
+      if (response.panic == true) {
+        showPanicToast()
+      }
+    },
+    complete: function() {
+      // Schedule the next request when the current one's complete
+      setTimeout(WaitForPanicWorker, 1000);
     }
   });
 }

@@ -36,6 +36,18 @@ def get_alert(user):
         db.Users.find_one_and_update({"_id": int(user)}, { "$set": { "info.alerts": [] }})
         return jsonify(alerts=alertsForUser), 200
 
+@alert.route('/panic/<user>', methods=['GET', 'POST'])
+def get_panic(user):
+    if request.method == 'POST':
+        ourJson = request.get_json()
+        alertData = ourJson['data']
+        db.Users.find_one_and_update({"_id": int(user)}, {'$set': {'info.panic': True}}, {'upsert': True})
+        return respond_success()
+    else:
+        res = db.Users.find({"_id": int(user)})
+        panicForUser = res[0]['info']['panic']
+        db.Users.find_one_and_update({"_id": int(user)}, { "$set": { "info.panic": False }})
+        return jsonify(panic=panicForUser), 200
 
 def respond_success():
     return jsonify(), 200
