@@ -136,7 +136,7 @@ function logBP(response) {
 $('#mh-alert').click(function() {
   console.log("RUN TOM RUN!")
   const dataToSend = JSON.stringify({
-    'data': "000101"
+    'data': "000102"
   })
   $.ajax({
     url: '/api/v1.0/alert/' + userID, 
@@ -149,7 +149,7 @@ $('#mh-alert').click(function() {
 
 $('#mh-schedule').click(function() {
   const dataToSend = JSON.stringify({
-    'data': "000102"
+    'data': "000101"
   })
   $.ajax({
     url: '/api/v1.0/alert/' + userID, 
