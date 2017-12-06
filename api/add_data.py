@@ -16,7 +16,7 @@ class PacketTypes:
 # TODO: Make real periods
 # TODO: Figure out how to modify time
 class PacketPeriods:
-    ECG = 6000
+    ECG = 4000
     HEART_RATE = 10000000
     BREATHING_RATE = 60000000
     TEMPERATURE = 60000000
