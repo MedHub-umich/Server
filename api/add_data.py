@@ -81,7 +81,7 @@ def ingestTemperature(packet):
     return respond_success()
 
 def ingestBloodPressure(packet):
-    data = parse_data(packet['data'], PacketPeriods.BLOOD_PRESSURE, packet['time'])
+    data = parse_data_bp(packet['data'], PacketPeriods.BLOOD_PRESSURE, packet['time'])
     db.Users.find_one_and_update({"_id": packet['user']}, {'$push': {'blood_pressure.data': {'$each': data,'$position': 0, '$slice': 100}}} , {'upsert': True})
     return respond_success()
 
@@ -110,6 +110,18 @@ def parse_data_ecg(raw_data, period, starting_time):
         currTime += timedelta(microseconds=period)
     convertedData.reverse()
     return convertedData
+
+def parse_data_bp(raw_data, period, starting_time):
+    data = convertDataToBytes(raw_data)
+    convertedData = []
+    currTime = datetime.strptime(starting_time, "%Y-%m-%d %H:%M:%S.%f")
+    convertedData.append({
+            "systolic": data[0],
+            "diastolic": data[1],
+            "heart_rate": data[2],
+            "time": str(currTime)
+        })
+    return convertedData    
 
 def convertEndian(lsb, msb):
     return lsb + msb * 256
