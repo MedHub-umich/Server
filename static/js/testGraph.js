@@ -7,7 +7,7 @@ window.onload = function() {
     var ecgUpdateRate = 1000
     worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000, function (data) {
     })
-    var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius", 30, 36)
+    var tempChart = initChart('#bodyTemperatureGraph', "Degrees Celsius", 30, 40)
     var tempURL = baseURL + '/temperature?amount=20'
     var tempUpdateRate = 29000
     worker(tempChart, tempURL, tempUpdateRate, "Temperature", 1, function (data) {
@@ -15,7 +15,7 @@ window.onload = function() {
       $('#tempUpdate').text(updateStr)
     })
 
-    var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute", 7, 16)
+    var breathingChart = initChart('#breathingRateGraph', "Breaths Per Minute", 0, 30)
     var breathingURL = baseURL + '/breathing_rate?amount=20'
     var breathingUpdateRate = 29000
     worker(breathingChart, breathingURL, breathingUpdateRate, "Breathing Rate", 1, function (data) {
