@@ -2,7 +2,7 @@ userID = $('#patientData').text()
 baseURL = '/api/v1.0/sensor/' + userID
 const numBPReadings = 5
 window.onload = function() {
-    var ecgChart = initChart('#ecgGraph', "Volts", 1.3, 2.3)
+    var ecgChart = initChart('#ecgGraph', "Volts", 1.3, 2.7)
     var ecgURL =  baseURL + '/ecg?amount=1250'
     var ecgUpdateRate = 1000
     worker(ecgChart, ecgURL, ecgUpdateRate, "ECG", 1000, function (data) {
@@ -73,6 +73,9 @@ function initChart(chartID, label, ymin, ymax) {
             // ['ecg'].concat(nextDataPoints),
         ]
     },
+    line: {
+      connectNull: false
+    },
     axis: {
       y: {
         max: ymax,
@@ -93,7 +96,8 @@ function initChart(chartID, label, ymin, ymax) {
     },
     // Don't show the dots (looks weird with 1.2k points)
     point: {
-      show: false
+      show: true,
+      r: 1
     },
     transition: {
       duration: 350
