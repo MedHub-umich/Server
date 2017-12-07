@@ -22,7 +22,7 @@ window.onload = function() {
       var updateStr = data + " BPM"
       $('#brUpdate').text(updateStr)
     })
-    var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute", 40, 100)
+    var heartRateChart = initChart('#heartRateGraph', "Beats Per Minute", 50, 120)
     var heartRateURL = baseURL + '/heart_rate?amount=30'
     var heartRateUpdateRate = 3000
     worker(heartRateChart, heartRateURL, heartRateUpdateRate, "Heart Rate", 1, function (data) {
@@ -97,7 +97,7 @@ function initChart(chartID, label, ymin, ymax) {
     // Don't show the dots (looks weird with 1.2k points)
     point: {
       show: true,
-      r: 1
+      r: 2
     },
     transition: {
       duration: 350
